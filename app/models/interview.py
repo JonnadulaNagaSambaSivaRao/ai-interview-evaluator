@@ -1,17 +1,19 @@
+from datetime import datetime
+
 from sqlalchemy import (
     Column,
     Integer,
     String,
-    Float,
+    Text,
     DateTime,
     ForeignKey
 )
-from sqlalchemy.sql import func
 
 from app.database import Base
 
 
 class Interview(Base):
+
     __tablename__ = "interviews"
 
     id = Column(
@@ -20,39 +22,32 @@ class Interview(Base):
         index=True
     )
 
-    user_id = Column(
-        Integer,
-        ForeignKey("users.id"),
+    title = Column(
+        String(200),
         nullable=False
+    )
+
+    description = Column(
+        Text,
+        nullable=True
     )
 
     job_role_id = Column(
         Integer,
-        ForeignKey("job_roles.id"),
-        nullable=False
+        ForeignKey(
+            "job_roles.id",
+            ondelete="SET NULL"
+        ),
+        nullable=True
     )
 
     status = Column(
-        String(50),
-        default="scheduled"
-    )
-
-    score = Column(
-        Float,
-        nullable=True
-    )
-
-    started_at = Column(
-        DateTime(timezone=True),
-        nullable=True
-    )
-
-    completed_at = Column(
-        DateTime(timezone=True),
-        nullable=True
+        String(30),
+        nullable=False,
+        default="active"
     )
 
     created_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now()
+        DateTime,
+        default=datetime.utcnow
     )

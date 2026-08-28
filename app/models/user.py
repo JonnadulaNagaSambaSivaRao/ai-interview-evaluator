@@ -1,11 +1,10 @@
-# app/models/user.py
-
 from sqlalchemy import Column, Integer, String
 
 from app.database import Base
 
 
 class User(Base):
+
     __tablename__ = "users"
 
     id = Column(
@@ -15,29 +14,24 @@ class User(Base):
     )
 
     name = Column(
-        String,
+        String(100),
         nullable=False
     )
 
     email = Column(
-        String,
+        String(255),
         unique=True,
         nullable=False,
         index=True
     )
 
-    password_hash = Column(
-        String,
+    hashed_password = Column(
+        String(255),
         nullable=False
     )
 
     role = Column(
-        String,
+        String(20),
         nullable=False,
         default="candidate"
-    )
-
-    resume_url = Column(
-        String,
-        nullable=True
     )

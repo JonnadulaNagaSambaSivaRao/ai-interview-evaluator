@@ -1,16 +1,15 @@
 from sqlalchemy import (
     Column,
     Integer,
-    Float,
     Text,
     ForeignKey
 )
-from sqlalchemy.dialects.postgresql import JSONB
 
 from app.database import Base
 
 
 class Evaluation(Base):
+
     __tablename__ = "evaluations"
 
     id = Column(
@@ -19,25 +18,17 @@ class Evaluation(Base):
         index=True
     )
 
-    interview_id = Column(
+    attempt_id = Column(
         Integer,
-        ForeignKey("interviews.id"),
+        ForeignKey(
+            "interview_attempts.id",
+            ondelete="CASCADE"
+        ),
         nullable=False
     )
 
-    question_id = Column(
+    score = Column(
         Integer,
-        ForeignKey("interview_questions.id"),
-        nullable=True
-    )
-
-    criteria_scores = Column(
-        JSONB,
-        default=dict
-    )
-
-    overall_score = Column(
-        Float,
         nullable=True
     )
 

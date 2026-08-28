@@ -1,16 +1,16 @@
 from sqlalchemy import (
     Column,
     Integer,
-    Boolean,
-    Float,
-    Text,
-    ForeignKey
+    String,
+    ForeignKey,
+    UniqueConstraint
 )
 
 from app.database import Base
 
 
 class InterviewEligibility(Base):
+
     __tablename__ = "interview_eligibility"
 
     id = Column(
@@ -19,25 +19,34 @@ class InterviewEligibility(Base):
         index=True
     )
 
+    candidate_id = Column(
+        Integer,
+        ForeignKey(
+            "users.id",
+            ondelete="CASCADE"
+        ),
+        nullable=False
+    )
+
     interview_id = Column(
         Integer,
-        ForeignKey("interviews.id"),
+        ForeignKey(
+            "interviews.id",
+            ondelete="CASCADE"
+        ),
+        nullable=False
+    )
+
+    status = Column(
+        String(30),
         nullable=False,
-        unique=True
+        default="assigned"
     )
 
-    eligible = Column(
-        Boolean,
-        nullable=False,
-        default=False
-    )
-
-    score = Column(
-        Float,
-        nullable=True
-    )
-
-    reason = Column(
-        Text,
-        nullable=True
+    __table_args__ = (
+        UniqueConstraint(
+            "candidate_id",
+            "interview_id",
+            name="unique_candidate_interview"
+        ),
     )

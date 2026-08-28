@@ -1,22 +1,33 @@
+from datetime import datetime
+
 from sqlalchemy import (
     Column,
     Integer,
-    Text,
     String,
+    DateTime,
     ForeignKey
 )
 
 from app.database import Base
 
 
-class InterviewQuestion(Base):
+class InterviewAttempt(Base):
 
-    __tablename__ = "interview_questions"
+    __tablename__ = "interview_attempts"
 
     id = Column(
         Integer,
         primary_key=True,
         index=True
+    )
+
+    candidate_id = Column(
+        Integer,
+        ForeignKey(
+            "users.id",
+            ondelete="CASCADE"
+        ),
+        nullable=False
     )
 
     interview_id = Column(
@@ -28,43 +39,23 @@ class InterviewQuestion(Base):
         nullable=False
     )
 
-    attempt_id = Column(
-        Integer,
-        ForeignKey(
-            "interview_attempts.id",
-            ondelete="CASCADE"
-        ),
-        nullable=True
-    )
-
-    question = Column(
-        Text,
-        nullable=False
-    )
-
-    question_type = Column(
+    status = Column(
         String(30),
         nullable=False,
-        default="text"
+        default="started"
     )
 
-    marks = Column(
-        Integer,
-        nullable=False,
-        default=10
+    started_at = Column(
+        DateTime,
+        default=datetime.utcnow
     )
 
-    answer = Column(
-        Text,
+    submitted_at = Column(
+        DateTime,
         nullable=True
     )
 
     score = Column(
         Integer,
-        nullable=True
-    )
-
-    feedback = Column(
-        Text,
         nullable=True
     )

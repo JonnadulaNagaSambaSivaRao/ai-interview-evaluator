@@ -2,18 +2,14 @@ from sqlalchemy import (
     Column,
     Integer,
     Text,
-    String,
-    Float,
-    ForeignKey,
-    DateTime
+    ForeignKey
 )
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.sql import func
 
 from app.database import Base
 
 
 class FinalReport(Base):
+
     __tablename__ = "final_reports"
 
     id = Column(
@@ -22,39 +18,26 @@ class FinalReport(Base):
         index=True
     )
 
-    interview_id = Column(
+    attempt_id = Column(
         Integer,
-        ForeignKey("interviews.id"),
-        nullable=False,
-        unique=True
+        ForeignKey(
+            "interview_attempts.id",
+            ondelete="CASCADE"
+        ),
+        nullable=False
     )
 
     overall_score = Column(
-        Float,
+        Integer,
         nullable=True
     )
 
     recommendation = Column(
-        String(50),
+        Text,
         nullable=True
     )
 
     summary = Column(
         Text,
         nullable=True
-    )
-
-    strengths = Column(
-        JSONB,
-        default=list
-    )
-
-    weaknesses = Column(
-        JSONB,
-        default=list
-    )
-
-    created_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now()
     )

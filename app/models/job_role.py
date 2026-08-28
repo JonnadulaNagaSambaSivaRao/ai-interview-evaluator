@@ -1,10 +1,10 @@
-from sqlalchemy import Column, Integer, String, Text, Integer
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Column, Integer, String, Text
 
 from app.database import Base
 
 
 class JobRole(Base):
+
     __tablename__ = "job_roles"
 
     id = Column(
@@ -13,22 +13,13 @@ class JobRole(Base):
         index=True
     )
 
-    title = Column(
+    name = Column(
         String(150),
-        nullable=False
+        nullable=False,
+        unique=True
     )
 
     description = Column(
         Text,
         nullable=True
-    )
-
-    required_skills = Column(
-        JSONB,
-        default=list
-    )
-
-    min_experience = Column(
-        Integer,
-        default=0
     )
